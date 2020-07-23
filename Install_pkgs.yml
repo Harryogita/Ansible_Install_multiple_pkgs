@@ -1,0 +1,22 @@
+---
+ - hosts: dbservers
+   name: playbook to install java and webserver per OS type deb=apache2  RHEL=httpd
+   gather_facts: true
+   become: true
+   tasks:
+           - name: task to install httpd if RHEL os family
+             yum: name=httpd state=latest
+             when: ansible_os_family=="RedHat"
+             # ignore_errors: true
+
+           - name: task to install apache2 if deb os family
+             apt: name=apache2 state=latest
+             when: ansible_os_family=="Debian"
+
+           - name: task to install java-1.8.0-openjdk for redhat
+             yum: name=java-1.8.0-openjdk state=latest
+             when: ansible_os_family=="RedHat"
+
+           - name: task to install openjdk-8-jdk for debian
+             apt: name=openjdk-8-jdk state=latest
+             when: ansible_os_family=="Debian"
